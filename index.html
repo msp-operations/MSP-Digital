@@ -133,7 +133,7 @@
   var DEFAULT = cap.innerHTML;
 
   function el(p, ring) {
-    var href = p.next || p.live, soon = p.status === 'dev' || !href;
+    var href = (HUBKEY === 'staff' && p.nextStaff) || p.next || p.live, soon = p.status === 'dev' || !href;
     var a = document.createElement(soon ? 'span' : 'a');
     a.className = 'tool' + (ring ? ' ring' : '') + (soon ? ' soon' : '');
     if (!soon) a.href = href;
