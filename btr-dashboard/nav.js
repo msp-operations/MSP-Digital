@@ -19,6 +19,7 @@
         { label: 'Students', group: true },
         { label: 'Home', href: 'index.html', icon: 'home', hint: 'BTR at a glance' },
         { label: 'Before you start', href: 'before-you-start.html', icon: 'compass' },
+        { label: 'Browse projects', href: 'browse-projects.html', icon: 'search', hint: 'Find your thesis project' },
         { label: 'Writing the proposal', href: 'writing-the-proposal.html', icon: 'edit' },
         { label: 'Writing the thesis', href: 'writing-the-thesis.html', icon: 'filetext' },
         { label: 'Video guidelines', href: 'btr-video.html', icon: 'video' },
@@ -27,10 +28,6 @@
         { label: 'Cohorts', group: true },
         { label: 'September 2026', href: 'september-cohort-2026.html', icon: 'calendar', hint: 'Dashboard and timeline' },
         { label: 'February 2027', href: 'february-cohort-2027.html', icon: 'calendar', hint: 'Dashboard and timeline' },
-        { label: 'Supervisors', group: true },
-        { label: 'Supervisor hub', href: 'supervisors.html', icon: 'users' },
-        { label: 'Browse projects', href: 'browse-projects.html', icon: 'book' },
-        { label: 'Submit a project', href: 'submit-project.html', icon: 'briefcase' },
         { divider: true },
         { label: 'Contact the BTR office', href: 'mailto:msp-btr@maastrichtuniversity.nl', icon: 'mail', external: true }
     ];
@@ -40,9 +37,6 @@
     var PARENT = {
         'timeline-september.html': 'september-cohort-2026.html',
         'timeline-february.html': 'february-cohort-2027.html',
-        'supervisor-role.html': 'supervisors.html',
-        'internal-advisor-role.html': 'supervisors.html',
-        'supervisor-btr-overview.html': 'supervisors.html',
         '404.html': 'index.html'
     };
 
@@ -74,12 +68,8 @@
         'timeline-september.html': ['September 2026 Cohort|september-cohort-2026.html', 'Timeline'],
         'faq.html': ['FAQ'],
         'rubrics.html': ['Assessment Rubrics'],
-        'supervisors.html': ['Supervisors'],
-        'supervisor-role.html': ['Supervisors|supervisors.html', 'Supervisor Role'],
-        'internal-advisor-role.html': ['Supervisors|supervisors.html', 'Internal Advisor Role'],
-        'supervisor-btr-overview.html': ['Supervisors|supervisors.html', 'BTR Overview'],
-        'browse-projects.html': ['Browse Projects'],
-        'submit-project.html': ['Supervisors|supervisors.html', 'Submit a Project']
+        'browse-projects.html': ['Browse Projects']
+
     };
     var crumbs = breadcrumbMap[path];
     if (crumbs && hero && !hero.querySelector('.btr-crumbs')) {
