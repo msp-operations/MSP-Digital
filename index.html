@@ -22,6 +22,10 @@
   /* top and bottom bars */
   .bar{display:flex;align-items:center;justify-content:space-between;padding:28px 44px;gap:16px}
   .bar img{height:30px;filter:brightness(0) invert(1);opacity:.92;display:block}
+  .switch{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:600;letter-spacing:.06em;color:rgba(255,255,255,.75);text-decoration:none;padding:9px 16px;border:1px solid rgba(255,255,255,.18);border-radius:999px;transition:all .2s}
+  .switch:hover{background:#fff;color:var(--msp-navy);border-color:#fff}
+  .switch svg{width:14px;height:14px}
+  .kicker{display:inline-block;margin-top:24px;font-size:10.5px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--msp-sky);padding:5px 12px;border:1px solid rgba(110,210,236,.35);border-radius:999px}
   .bar .prog{font-size:10.5px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.55);text-align:right;line-height:1.6}
   .foot{display:flex;justify-content:space-between;gap:16px;padding:22px 44px 28px;font-size:11px;color:rgba(255,255,255,.38);letter-spacing:.02em}
   .foot a{color:rgba(255,255,255,.6);text-decoration:none;border-bottom:1px solid rgba(255,255,255,.18)}
@@ -38,7 +42,7 @@
   .core img{width:188px;height:auto;display:block;margin:0 auto;filter:brightness(0) invert(1);opacity:.96}
   .core .glow{position:absolute;left:50%;top:94px;width:280px;height:280px;transform:translate(-50%,-50%);border-radius:50%;
     background:radial-gradient(circle, rgba(110,210,236,.16) 0%, rgba(110,210,236,0) 65%);z-index:-1}
-  .core h1{font-family:var(--msp-font-display);font-weight:700;font-size:30px;letter-spacing:-.02em;margin:26px 0 0;line-height:1.15}
+  .core h1{font-family:var(--msp-font-display);font-weight:700;font-size:30px;letter-spacing:-.02em;margin:12px 0 0;line-height:1.15}
   .core .cap{margin-top:10px;min-height:44px;font-size:13.5px;line-height:1.6;color:rgba(255,255,255,.6);transition:opacity .2s}
   .core .cap b{display:block;color:#fff;font-weight:600;font-size:12px;letter-spacing:.14em;text-transform:uppercase;margin-bottom:2px}
 
@@ -90,7 +94,7 @@
 
 <header class="bar">
   <img src="msp-ui/um-wordmark.png" alt="Maastricht University">
-  <div class="prog">Maastricht Science Programme<br>Faculty of Science and Engineering</div>
+  <a class="switch" id="switch" href="#"></a>
 </header>
 
 <main class="stage" id="stage">
@@ -98,26 +102,34 @@
   <div class="core">
     <div class="glow"></div>
     <img src="msp-ui/msp-emblem.png" alt="Maastricht Science Programme">
+    <div class="kicker" id="kicker"></div>
     <h1>MSP Online</h1>
-    <div class="cap" id="cap" aria-live="polite">Every Maastricht Science Programme tool, in one place.</div>
+    <div class="cap" id="cap" aria-live="polite"></div>
   </div>
   <nav class="list" id="list" aria-label="MSP tools"></nav>
 </main>
 
 <footer class="foot">
-  <span>Maastricht Science Programme · Maastricht University</span>
+  <span>Maastricht Science Programme · Faculty of Science and Engineering · Maastricht University</span>
   <span>Questions about a tool: <a href="mailto:msp-operations@maastrichtuniversity.nl">msp-operations@maastrichtuniversity.nl</a></span>
 </footer>
 
+<script>window.MSP_HUB = 'students';</script>
 <script src="projects.js"></script>
 <script src="msp-ui/msp-shell.js"></script>
 <script>
 (function () {
-  var P = window.MSP_PROJECTS || [];
+  var HUBKEY = window.MSP_HUB || 'students';
+  var HUB = (window.MSP_HUBS || {})[HUBKEY] || { title: '', line: '' };
+  var P = (window.MSP_PROJECTS || []).filter(function (p) { return (p.hubs || []).indexOf(HUBKEY) >= 0; });
+  document.getElementById('kicker').textContent = HUB.title;
+  document.getElementById('cap').textContent = HUB.line;
+  var sw = document.getElementById('switch'), other = (window.MSP_HUBS || {})[HUB.other];
+  if (other) { sw.href = other.file; sw.innerHTML = HUB.otherLabel + ' <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>'; } else { sw.remove(); }
+  function blurb(p) { return (HUBKEY === 'staff' && p.blurbStaff) || p.blurb; }
   var stage = document.getElementById('stage'), svg = document.getElementById('orbit');
   var cap = document.getElementById('cap'), list = document.getElementById('list');
   var DEFAULT = cap.innerHTML;
-  var AUD = { students: 'For students', supervisors: 'For supervisors', staff: 'For staff', alumni: 'Alumni' };
 
   function el(p, ring) {
     var href = p.next || p.live, soon = p.status === 'dev' || !href;
@@ -126,13 +138,13 @@
     if (!soon) a.href = href;
     a.innerHTML = '<span class="ic">' + MSPShell.icon(p.icon) + '</span>' +
       (ring ? '<span>' + p.name + '</span>' + (soon ? '<span class="tag">soon</span>' : '')
-            : '<span class="txt">' + p.name + (soon ? ' <span class="tag">soon</span>' : '') + '<small>' + p.blurb + '</small></span>');
+            : '<span class="txt">' + p.name + (soon ? ' <span class="tag">soon</span>' : '') + '<small>' + blurb(p) + '</small></span>');
     if (ring) {
-      var show = function () { cap.innerHTML = '<b>' + (AUD[p.audience] || '') + '</b>' + p.blurb; };
+      var show = function () { cap.innerHTML = '<b>' + p.name + '</b>' + blurb(p); };
       var hide = function () { cap.innerHTML = DEFAULT; };
       a.addEventListener('mouseenter', show); a.addEventListener('mouseleave', hide);
       a.addEventListener('focus', show); a.addEventListener('blur', hide);
-      if (!soon) a.setAttribute('aria-label', p.name + ': ' + p.blurb);
+      if (!soon) a.setAttribute('aria-label', p.name + ': ' + blurb(p));
     }
     return a;
   }
@@ -157,13 +169,8 @@
   }
   layout(); window.addEventListener('resize', layout);
 
-  // narrow screens: grouped list
-  ['students', 'supervisors', 'staff', 'alumni'].forEach(function (k) {
-    var items = P.filter(function (p) { return p.audience === k; });
-    if (!items.length) return;
-    var g = document.createElement('div'); g.className = 'grp'; g.textContent = AUD[k]; list.appendChild(g);
-    items.forEach(function (p) { list.appendChild(el(p, false)); });
-  });
+  // narrow screens: a plain list
+  P.forEach(function (p) { list.appendChild(el(p, false)); });
 })();
 </script>
 </body>
