@@ -165,6 +165,9 @@
       });
       card('btr-projects', 'dots', function (t) { return '<div class="ch"><span class="ic">' + I(t.icon) + '</span></div><div class="end"><h3>' + esc(t.name) + '</h3><p>Offer a Bachelor Thesis Research project.</p></div>'; });
       card('plan-reviews', '', function (t) { return '<div class="ch"><span class="ic">' + I(t.icon) + '</span><span class="tag g">Preview</span></div><div class="end"><h3>' + esc(t.name) + '</h3><p>Approve or comment on the study plans students send.</p></div>'; });
+      // an odd number of small cards next to the tall one: the last one fills the row
+      var small = cards.querySelectorAll('.sh-card:not(.tall)');
+      if (small.length % 2) small[small.length - 1].classList.add('wide');
     } else {
       // Course Planner: counts down to the next course registration week (key dates with kind 'reg')
       var reg = allDates.filter(function (k) { return k.kind === 'reg'; })[0];
