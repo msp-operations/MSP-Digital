@@ -165,6 +165,7 @@
       });
       card('btr-projects', 'dots', function (t) { return '<div class="ch"><span class="ic">' + I(t.icon) + '</span></div><div class="end"><h3>' + esc(t.name) + '</h3><p>Offer a Bachelor Thesis Research project.</p></div>'; });
       card('plan-reviews', '', function (t) { return '<div class="ch"><span class="ic">' + I(t.icon) + '</span><span class="tag g">Preview</span></div><div class="end"><h3>' + esc(t.name) + '</h3><p>Approve or comment on the study plans students send.</p></div>'; });
+      card('course-planner', '', function (t) { return '<div class="ch"><span class="ic">' + I(t.icon) + '</span></div><div class="end"><h3>' + esc(t.name) + '</h3><p>The planner students use: schedules, clashes, credits.</p></div>'; });
       // an odd number of small cards next to the tall one: the last one fills the row
       var small = cards.querySelectorAll('.sh-card:not(.tall)');
       if (small.length % 2) small[small.length - 1].classList.add('wide');
@@ -262,9 +263,10 @@
     var sgrid = $('.sh-sgrid'), stu = {};
     (ctx.students || []).forEach(function (t) { stu[t.id] = t; });
     STUDENT_ORDER.forEach(function (id) {
-      var t = stu[id]; if (!t) return;
+      var t = stu[id]; if (!t || byId[id]) return;   // a tool staff also have is already a card above
       sgrid.appendChild(el('<a class="sh-sc" href="' + esc(ctx.studentHub + '#' + id) + '"><span class="st2"><b>' + esc(t.name) + '</b><small>' + esc(STUDENT_NOTE[id] || t.hint || '') + '</small></span></a>'));
     });
+    if (sgrid) sgrid.classList.toggle('n3', sgrid.children.length === 3);
 
     // ── live: the Academic Calendar ──
     fetch(CAL_URL).then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); }).then(function (data) {
@@ -305,7 +307,7 @@
     function index() {
       var items = [];
       (ctx.tools || []).forEach(function (t) { items.push({ kind: 'Staff tool', title: t.name, sub: t.hint || '', text: [t.name, t.hint, t.blurb].join(' '), run: function () { var a = cards.querySelector('[data-id="' + t.id + '"]'); if (a) go(a, t); else ctx.open(t.id); } }); });
-      (ctx.students || []).forEach(function (t) { items.push({ kind: 'Student tool', title: t.name, sub: t.hint || '', text: [t.name, t.hint, t.blurb].join(' '), run: function () { location.href = ctx.studentHub + '#' + t.id; } }); });
+      (ctx.students || []).forEach(function (t) { if (byId[t.id]) return; items.push({ kind: 'Student tool', title: t.name, sub: t.hint || '', text: [t.name, t.hint, t.blurb].join(' '), run: function () { location.href = ctx.studentHub + '#' + t.id; } }); });
       var cal = byId['academic-calendar'], openCal = function () { if (cal) { var a = cards.querySelector('[data-id="academic-calendar"]'); if (a) go(a, cal); else ctx.open(cal.id); } };
       var todayIso = iso(today);
       (events || []).forEach(function (e) {

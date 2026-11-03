@@ -198,6 +198,8 @@ body.hub-home .v3-home > :not(.shp){display:none!important}
 /* narrower desktops: the student cards a little tighter so the names fit */
 @media (min-width:901px) and (max-width:1440px){ .sh-sc{gap:8px;padding-left:9px;padding-right:9px} .sh-sc .si{width:26px;height:26px} .sh-sc .si svg{width:15px;height:15px} .sh-sc b{font-size:13px} }
 @media (min-width:901px) and (max-width:1180px){ .sh-sgrid{grid-template-columns:repeat(2,1fr)} .sh-right{padding-left:32px;padding-right:32px} }
+/* three student tools (when staff also have one as a card): one row of three on desktop */
+@media (min-width:901px){ .sh-sgrid.n3{grid-template-columns:repeat(3,1fr)} }
 /* phones and small tablets: one column, the photo panel on top */
 @media (max-width:900px){
   .shp{display:block}

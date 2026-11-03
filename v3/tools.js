@@ -47,7 +47,11 @@ window.V3 = {
         // { id: 'plan-reviews', name: 'Plan reviews', icon: 'clipboard', hint: 'Advisors and study plans', ownNav: true,
         //   blurb: 'Advisors sign in under Account to see the study plans students send from the Course Planner, and approve or comment.',
         //   url: 'https://arthurgallaxy.github.io/msp-course-lab-selector-development/' },
-        { id: 'tutoring',         name: 'Tutor Registration', icon: 'users',     hint: 'Tutorial groups',
+        // the same planner the students use (3 Nov 2026), so staff can check a schedule, clashes and credits
+        { id: 'course-planner',    name: 'Course Planner',     icon: 'calendar',  hint: 'The planner students use',
+          blurb: 'The planner students use: build a schedule, check clashes and credits.', url: 'https://pchrista.github.io/msp-course-lab-selector/',
+          ownNav: true },
+        { id: 'tutoring',        name: 'Tutor Registration', icon: 'users',     hint: 'Tutorial groups',
           blurb: 'Claim the tutorial groups you want to teach; the office allocates from here.', url: 'https://msp-tutoring.nl/' },
         { id: 'btr-projects',      name: 'BTR Projects',       icon: 'briefcase', hint: 'Offer a thesis project',
           blurb: 'Offer a Bachelor Thesis Research project to MSP students.', url: 'sites/btr-projects/', note: 'Pending change, not on the live site yet' }
